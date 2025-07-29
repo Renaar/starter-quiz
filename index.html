@@ -4,17 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quel starter as-tu obtenu ?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
   <style>
-    body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 2em; background: #f0f8ff; }
+    body {
+      font-family: 'Lexend', sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 2em;
+      background: #f0f8ff;
+    }
     h1, h2 { text-align: center; }
+    img.header-image {
+      display: block;
+      margin: 1em auto;
+      max-width: 100%;
+      border-radius: 12px;
+    }
     .question { margin-bottom: 1.5em; }
-    .answers button { display: block; width: 100%; margin: 0.3em 0; padding: 0.5em; font-size: 1em; }
-    #result { text-align: center; margin-top: 2em; font-size: 1.3em; }
-    #start-again { margin-top: 2em; display: none; }
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 0.3em 0;
+      padding: 0.5em;
+      font-size: 1em;
+      border-radius: 12px;
+      border: none;
+      background-color: #e0e0ff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .answers button:hover {
+      background-color: #c0c0ff;
+    }
+    #result {
+      text-align: center;
+      margin-top: 2em;
+      font-size: 1.3em;
+    }
+    #start-again {
+      margin-top: 2em;
+      display: none;
+      border-radius: 12px;
+      padding: 0.5em 1em;
+      font-size: 1em;
+      background-color: #ffcccb;
+      border: none;
+      cursor: pointer;
+    }
+    #start-again:hover {
+      background-color: #ffa0a0;
+    }
   </style>
 </head>
 <body>
   <h1>Quel starter as-tu obtenu ?</h1>
+  <img class="header-image" src="https://archives.bulbagarden.net/media/upload/thumb/e/ee/Pok%C3%A9mon_Day_2022_Kanto_Artwork.png/300px-Pok%C3%A9mon_Day_2022_Kanto_Artwork.png" alt="Image de démarrage">
   <div id="quiz"></div>
   <div id="result"></div>
   <button id="start-again" onclick="location.reload()">Recommencer</button>
