@@ -96,10 +96,34 @@
     ];
 
     const starters = {
-      "🔥": "Ton starter est Flambino ! 🔥 Rapide, curieux et toujours prêt à foncer.",
-      "💧": "Ton starter est Tiplouf ! 💧 Calme, fier, et déterminé à sa façon.",
-      "🌿": "Ton starter est Brindibou ! 🌿 Discret, malin, et toujours à l’écoute.",
-      "⚡": "Ton starter est Pikachu ! ⚡ Énergique, sociable et fidèle compagnon."
+      "🔥": [
+        "Ton starter est Flambino ! 🔥 Rapide, curieux et toujours prêt à foncer.",
+        "Ton starter est Salamèche ! 🔥 Petit dragon vif, il aime relever les défis.",
+        "Ton starter est Ouisticram ! 🔥 Agile et malin, il grimpe vers la victoire.",
+        "Ton starter est Héricendre ! 🔥 Calme en apparence, mais explosif quand il faut.",
+        "Ton starter est Litten ! 🔥 Indépendant et stylé, il a du feu dans le regard."
+      ],
+      "💧": [
+        "Ton starter est Tiplouf ! 💧 Calme, fier, et déterminé à sa façon.",
+        "Ton starter est Carapuce ! 💧 Stratège rigolo, il avance à son rythme.",
+        "Ton starter est Moustillon ! 💧 Sérieux et méthodique, il ne rate rien.",
+        "Ton starter est Otaquin ! 💧 Créatif et doux, il apporte toujours un sourire.",
+        "Ton starter est Kaiminus ! 💧 Énergique et un peu maladroit, mais attachant."
+      ],
+      "🌿": [
+        "Ton starter est Brindibou ! 🌿 Discret, malin, et toujours à l’écoute.",
+        "Ton starter est Bulbizarre ! 🌿 Calme et équilibré, il grandit avec sagesse.",
+        "Ton starter est Germignon ! 🌿 Doux, loyal, et très attentionné.",
+        "Ton starter est Arcko ! 🌿 Rapide et silencieux, il agit avec précision.",
+        "Ton starter est Vipélierre ! 🌿 Élégant et observateur, il garde toujours son sang-froid."
+      ],
+      "⚡": [
+        "Ton starter est Pikachu ! ⚡ Énergique, sociable et fidèle compagnon.",
+        "Ton starter est Evoli ! ⚡ Polyvalent et attachant, il peut tout devenir.",
+        "Ton starter est Riolu ! ⚡ Déterminé et loyal, il apprend vite.",
+        "Ton starter est Lixy ! ⚡ Curieux et rapide, il adore explorer.",
+        "Ton starter est Poussifeu ! ⚡ Petit, vif et toujours partant pour s’amuser."
+      ]
     };
 
     let currentQuestion = 0;
@@ -129,7 +153,9 @@
     function showResult() {
       quizDiv.innerHTML = "";
       const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
-      resultDiv.innerHTML = starters[winner];
+      const options = starters[winner];
+      const chosen = options[Math.floor(Math.random() * options.length)];
+      resultDiv.innerHTML = chosen;
       document.getElementById("start-again").style.display = "block";
     }
 
