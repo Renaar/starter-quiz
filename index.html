@@ -205,6 +205,7 @@
 
     function showResult() {
       quizDiv.innerHTML = "";
+      quizDiv.innerHTML = "";
       const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
       const options = starters[winner];
       const chosen = options[Math.floor(Math.random() * options.length)];
@@ -213,6 +214,7 @@
       resultDiv.innerHTML = `${chosen}${image}`;
       document.getElementById("start-again").style.display = "block";
     }
+      showQuestion();
   </script>
 </body>
 </html>
