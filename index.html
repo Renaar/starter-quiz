@@ -41,11 +41,6 @@
       margin-top: 2em;
       font-size: 1.3em;
     }
-    #result img {
-      margin-top: 1em;
-      max-width: 150px;
-      border-radius: 12px;
-    }
     #start-again {
       margin-top: 2em;
       display: none;
@@ -144,36 +139,13 @@
       ]}
     ];
 
-    const imageUrls = {
-      "Flambino": "https://www.pokepedia.fr/images/thumb/1/17/Flambino_%28courant%29-EB.png/800px-Flambino_%28courant%29-EB.png",
-      "Salamèche": "https://www.pokepedia.fr/images/thumb/8/89/Salam%C3%A8che-RFVF.png/530px-Salam%C3%A8che-RFVF.png",
-      "Ouisticram": "https://www.pokepedia.fr/images/thumb/9/93/Ouisticram-DP.png/357px-Ouisticram-DP.png",
-      "Héricendre": "https://www.pokepedia.fr/images/thumb/a/ac/H%C3%A9ricendre-HGSS.png/790px-H%C3%A9ricendre-HGSS.png",
-      "Flamiaou": "https://www.pokepedia.fr/images/7/79/Flamiaou_%28boule_de_feu%29-SL.png",
-      "Tiplouf": "https://www.pokepedia.fr/images/thumb/e/ed/Tiplouf-DP.png/398px-Tiplouf-DP.png",
-      "Carapuce": "https://www.pokepedia.fr/images/thumb/c/cc/Carapuce-RFVF.png/580px-Carapuce-RFVF.png",
-      "Moustillon": "https://www.pokepedia.fr/images/thumb/8/81/Moustillon-NB.png/463px-Moustillon-NB.png",
-      "Otaquin": "https://www.pokepedia.fr/images/thumb/e/ee/Otaquin-SL.png/698px-Otaquin-SL.png",
-      "Kaiminus": "https://www.pokepedia.fr/images/thumb/0/00/Kaiminus-LPZA.png/382px-Kaiminus-LPZA.png",
-      "Brindibou": "https://www.pokepedia.fr/images/3/36/Brindibou_%28attaquant%29-SL.png",
-      "Bulbizarre": "https://www.pokepedia.fr/images/thumb/e/ef/Bulbizarre-RFVF.png/644px-Bulbizarre-RFVF.png",
-      "Germignon": "https://www.pokepedia.fr/images/thumb/9/9d/Germignon-LPZA.png/487px-Germignon-LPZA.png",
-      "Arcko": "https://www.pokepedia.fr/images/thumb/e/ef/Arcko-RS.png/570px-Arcko-RS.png",
-      "Vipélierre": "https://www.pokepedia.fr/images/thumb/8/8d/Vip%C3%A9lierre-NB.png/523px-Vip%C3%A9lierre-NB.png",
-      "Pikachu": "https://www.pokepedia.fr/images/thumb/a/a7/Pikachu_%28Casquette_d%27Alola%29-SL.png/308px-Pikachu_%28Casquette_d%27Alola%29-SL.png",
-      "Evoli": "https://www.pokepedia.fr/images/thumb/8/8b/%C3%89voli-RFVF.png/487px-%C3%89voli-RFVF.png",
-      "Riolu": "https://www.pokepedia.fr/images/thumb/7/7b/Riolu-DP.png/558px-Riolu-DP.png",
-      "Lixy": "https://www.pokepedia.fr/images/thumb/2/23/Lixy-DP.png/659px-Lixy-DP.png",
-      "Poussifeu": "https://www.pokepedia.fr/images/thumb/1/11/Poussifeu-RS.png/362px-Poussifeu-RS.png"
-    };
-
     const starters = {
-       "🔥": [
+      "🔥": [
         "Ton starter est Flambino ! 🔥 Rapide, curieux et toujours prêt à foncer.",
         "Ton starter est Salamèche ! 🔥 Petit dragon vif, il aime relever les défis.",
         "Ton starter est Ouisticram ! 🔥 Agile et malin, il grimpe vers la victoire.",
         "Ton starter est Héricendre ! 🔥 Calme en apparence, mais explosif quand il faut.",
-        "Ton starter est Flamiaou ! 🔥 Indépendant et stylé, il a du feu dans le regard."
+        "Ton starter est Litten ! 🔥 Indépendant et stylé, il a du feu dans le regard."
       ],
       "💧": [
         "Ton starter est Tiplouf ! 💧 Calme, fier, et déterminé à sa façon.",
@@ -198,40 +170,40 @@
       ]
     };
 
-    function extractPokemonName(text) {
-      const match = text.match(/Ton starter est (.*?) !/);
-      return match ? match[1] : null;
-    }
+    let currentQuestion = 0;
+    let scores = { "🔥": 0, "💧": 0, "🌿": 0, "⚡": 0 };
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
 
     function showQuestion() {
-  if (currentQuestion >= questions.length) return showResult();
-  const q = questions[currentQuestion];
-  quizDiv.innerHTML = `<div class="question">
-    <h2>${q.text}</h2>
-    <div class="answers">
-      ${q.answers.map((a) => `<button onclick="answer('${a.type}')">${a.text}</button>`).join('')}
-    </div>
-  </div>`;
-}
+      if (currentQuestion >= questions.length) return showResult();
 
-function answer(type) {
-  scores[type]++;
-  currentQuestion++;
-  showQuestion();
-}
+      const q = questions[currentQuestion];
+      quizDiv.innerHTML = `<div class="question">
+        <h2>${q.text}</h2>
+        <div class="answers">
+          ${q.answers.map((a, i) => `<button onclick="answer('${a.type}')">${a.text}</button>`).join('')}
+        </div>
+      </div>`;
+    }
 
-function showResult() {
-      quizDiv.innerHTML = "";
+    function answer(type) {
+      scores[type]++;
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
       quizDiv.innerHTML = "";
       const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
       const options = starters[winner];
       const chosen = options[Math.floor(Math.random() * options.length)];
-      const name = extractPokemonName(chosen);
-      const image = name && imageUrls[name] ? `<img src="${image}" alt="${name}">` : "";
-      resultDiv.innerHTML = `${chosen}${image}`;
+      resultDiv.innerHTML = chosen;
       document.getElementById("start-again").style.display = "block";
     }
-      showQuestion();
+
+    showQuestion();
   </script>
 </body>
 </html>
