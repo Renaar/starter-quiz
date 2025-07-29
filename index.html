@@ -203,7 +203,24 @@
       return match ? match[1] : null;
     }
 
-    function showResult() {
+    function showQuestion() {
+  if (currentQuestion >= questions.length) return showResult();
+  const q = questions[currentQuestion];
+  quizDiv.innerHTML = `<div class="question">
+    <h2>${q.text}</h2>
+    <div class="answers">
+      ${q.answers.map((a) => `<button onclick="answer('${a.type}')">${a.text}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function answer(type) {
+  scores[type]++;
+  currentQuestion++;
+  showQuestion();
+}
+
+function showResult() {
       quizDiv.innerHTML = "";
       quizDiv.innerHTML = "";
       const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
