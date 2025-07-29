@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quel starter as-tu obtenu ?</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 2em; background: #f0f8ff; }
+    h1, h2 { text-align: center; }
+    .question { margin-bottom: 1.5em; }
+    .answers button { display: block; width: 100%; margin: 0.3em 0; padding: 0.5em; font-size: 1em; }
+    #result { text-align: center; margin-top: 2em; font-size: 1.3em; }
+    #start-again { margin-top: 2em; display: none; }
+  </style>
+</head>
+<body>
+  <h1>Quel starter as-tu obtenu ?</h1>
+  <div id="quiz"></div>
+  <div id="result"></div>
+  <button id="start-again" onclick="location.reload()">Recommencer</button>
+
+  <script>
+    const questions = [
+      { text: "Tu es dans une forêt. Tu fais quoi ?", answers: [
+        { text: "J’escalade les rochers", type: "🔥" },
+        { text: "J’observe les animaux", type: "🌿" },
+        { text: "Je cherche un coin calme", type: "💧" },
+        { text: "Je propose un jeu au groupe", type: "⚡" }
+      ]},
+      { text: "En classe, on te connaît pour…", answers: [
+        { text: "Ton envie de réussir", type: "🔥" },
+        { text: "Ton humour", type: "⚡" },
+        { text: "Ta logique", type: "💧" },
+        { text: "Ta créativité", type: "🌿" }
+      ]},
+      { text: "Un ami a un souci, tu…", answers: [
+        { text: "Cherches une solution rapide", type: "🔥" },
+        { text: "Restes à ses côtés pour l’écouter", type: "💧" },
+        { text: "L’encourages avec une blague", type: "⚡" },
+        { text: "Lui écris un petit mot", type: "🌿" }
+      ]},
+      { text: "Tu dois créer un jeu vidéo. Tu préfères…", answers: [
+        { text: "Un jeu d’action où ça explose", type: "🔥" },
+        { text: "Un jeu d’énigmes avec une histoire", type: "💧" },
+        { text: "Un monde mignon à explorer", type: "🌿" },
+        { text: "Un jeu multijoueur drôle", type: "⚡" }
+      ]},
+      { text: "Tu dois faire un exposé en groupe. Tu es…", answers: [
+        { text: "Le chef de projet", type: "🔥" },
+        { text: "Celui qui organise les idées", type: "💧" },
+        { text: "Celui qui dessine ou met en page", type: "🌿" },
+        { text: "Celui qui parle à l’oral", type: "⚡" }
+      ]},
+      { text: "Ton animal idéal serait…", answers: [
+        { text: "Un félin agile", type: "🔥" },
+        { text: "Un poisson paisible", type: "💧" },
+        { text: "Un renard ou un hibou", type: "🌿" },
+        { text: "Un singe ou un chien joueur", type: "⚡" }
+      ]},
+      { text: "Dans un jeu, tu aimes…", answers: [
+        { text: "Gagner vite et bien", type: "🔥" },
+        { text: "Résoudre les puzzles", type: "💧" },
+        { text: "Décorer, personnaliser", type: "🌿" },
+        { text: "Rire et faire des mini-jeux", type: "⚡" }
+      ]},
+      { text: "Si on te lance un défi, tu…", answers: [
+        { text: "Acceptes tout de suite", type: "🔥" },
+        { text: "Analyzes d’abord si ça vaut le coup", type: "💧" },
+        { text: "Trouves une solution originale", type: "🌿" },
+        { text: "Transformes ça en jeu", type: "⚡" }
+      ]},
+      { text: "Un week-end parfait, c’est…", answers: [
+        { text: "Sport ou aventure", type: "🔥" },
+        { text: "Lire, regarder un doc", type: "💧" },
+        { text: "Peindre ou faire du jardin", type: "🌿" },
+        { text: "Sortir avec des amis", type: "⚡" }
+      ]},
+      { text: "Une appli que tu aimes ?", answers: [
+        { text: "YouTube ou TikTok pour apprendre", type: "🔥" },
+        { text: "Wikipédia, Geogebra", type: "💧" },
+        { text: "Pinterest, Procreate, Seek", type: "🌿" },
+        { text: "Snapchat, Discord", type: "⚡" }
+      ]},
+      { text: "Tu préfères travailler…", answers: [
+        { text: "Quand c’est un challenge", type: "🔥" },
+        { text: "Quand c’est structuré", type: "💧" },
+        { text: "Quand je peux faire à ma façon", type: "🌿" },
+        { text: "Quand on peut rire un peu", type: "⚡" }
+      ]},
+      { text: "Si tu étais un super-pouvoir, tu serais…", answers: [
+        { text: "Le feu", type: "🔥" },
+        { text: "La glace", type: "💧" },
+        { text: "La nature", type: "🌿" },
+        { text: "L’électricité", type: "⚡" }
+      ]}
+    ];
+
+    const starters = {
+      "🔥": "Ton starter est Flambino ! 🔥 Rapide, curieux et toujours prêt à foncer.",
+      "💧": "Ton starter est Tiplouf ! 💧 Calme, fier, et déterminé à sa façon.",
+      "🌿": "Ton starter est Brindibou ! 🌿 Discret, malin, et toujours à l’écoute.",
+      "⚡": "Ton starter est Pikachu ! ⚡ Énergique, sociable et fidèle compagnon."
+    };
+
+    let currentQuestion = 0;
+    let scores = { "🔥": 0, "💧": 0, "🌿": 0, "⚡": 0 };
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+
+    function showQuestion() {
+      if (currentQuestion >= questions.length) return showResult();
+
+      const q = questions[currentQuestion];
+      quizDiv.innerHTML = `<div class="question">
+        <h2>${q.text}</h2>
+        <div class="answers">
+          ${q.answers.map((a, i) => `<button onclick="answer('${a.type}')">${a.text}</button>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    function answer(type) {
+      scores[type]++;
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      quizDiv.innerHTML = "";
+      const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
+      resultDiv.innerHTML = starters[winner];
+      document.getElementById("start-again").style.display = "block";
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
