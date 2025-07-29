@@ -4,206 +4,771 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quel starter as-tu obtenu ?</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --fire: #ff6b6b;
+      --water: #4ecdc4;
+      --grass: #45b7d1;
+      --electric: #f9ca24;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --border-radius: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Lexend', sans-serif;
+      background: var(--primary-bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .container {
       max-width: 600px;
-      margin: auto;
-      padding: 2em;
-      background: #f0f8ff;
-    }
-    h1, h2 { text-align: center; }
-    img.header-image {
-      display: block;
-      margin: 1em auto;
-      max-width: 100%;
-      border-radius: 12px;
-    }
-    .question { margin-bottom: 1.5em; }
-    .answers button {
-      display: block;
       width: 100%;
-      margin: 0.3em 0;
-      padding: 0.5em;
-      font-size: 1em;
-      border-radius: 12px;
-      border: none;
-      background-color: #e0e0ff;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      animation: fadeIn 0.5s ease-out;
     }
-    .answers button:hover {
-      background-color: #c0c0ff;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    #result {
+
+    h1 {
       text-align: center;
-      margin-top: 2em;
-      font-size: 1.3em;
+      color: #333;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 2rem;
     }
-    #start-again {
-      margin-top: 2em;
-      display: none;
-      border-radius: 12px;
-      padding: 0.5em 1em;
-      font-size: 1em;
-      background-color: #ffcccb;
+
+    .name-form {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,248,255,0.9));
+      border-radius: var(--border-radius);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .name-form h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .name-form input {
+      width: 100%;
+      max-width: 300px;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      font-size: 1.1rem;
+      font-family: inherit;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .name-form input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .start-btn {
+      padding: 1rem 2rem;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
       border: none;
+      border-radius: var(--border-radius);
+      font-size: 1.1rem;
+      font-family: inherit;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      margin-top: 0.5rem;
     }
-    #start-again:hover {
-      background-color: #ffa0a0;
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .start-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .quiz-container {
+      display: none;
+    }
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(78,205,196,0.2), rgba(69,183,209,0.2), rgba(249,202,36,0.2));
+      border-radius: var(--border-radius);
+      margin: 1rem auto 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .pokemon-icons {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    .header-placeholder p {
+      color: #555;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--fire), var(--water), var(--grass), var(--electric));
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .question-container {
+      animation: slideIn 0.4s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .question h2 {
+      text-align: center;
+      color: #444;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+      font-size: 1.3rem;
+    }
+
+    .question-number {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .answers {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .answer-btn {
+      padding: 1rem;
+      border: none;
+      border-radius: var(--border-radius);
+      background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+      color: #333;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .answer-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .answer-btn:active {
+      transform: translateY(0);
+    }
+
+    .answer-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .answer-btn:hover::before {
+      left: 100%;
+    }
+
+    .result {
+      text-align: center;
+      animation: bounceIn 0.6s ease-out;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .result h2 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .starter-name {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin: 1rem 0;
+      background: linear-gradient(45deg, var(--fire), var(--electric));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .starter-image-container {
+      margin: 1rem 0;
+    }
+
+    .starter-image {
+      max-width: 200px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      animation: float 3s ease-in-out infinite;
+      image-rendering: auto;
+      background: rgba(255,255,255,0.8);
+      padding: 1rem;
+    }
+
+    .image-fallback {
+      padding: 2rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .pokemon-sprite {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .image-fallback p {
+      font-size: 1.2rem;
+      color: #555;
+      margin: 0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .description {
+      font-size: 1.2rem;
+      color: #555;
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+
+    .element-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      color: white;
+      font-weight: 600;
+      margin: 0.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .fire { background: var(--fire); }
+    .water { background: var(--water); }
+    .grass { background: var(--grass); }
+    .electric { background: var(--electric); }
+
+    .restart-btn {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1.1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .scores-display {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .score-item {
+      padding: 0.5rem;
+      border-radius: 8px;
+      text-align: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 1.5rem; }
+      h1 { font-size: 1.5rem; }
+      .question h2 { font-size: 1.1rem; }
+      .starter-name { font-size: 2rem; }
+      .scores-display { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <h1>Quel starter as-tu obtenu ?</h1>
-  <img class="header-image" src="https://archives.bulbagarden.net/media/upload/thumb/e/ee/Pok%C3%A9mon_Day_2022_Kanto_Artwork.png/300px-Pok%C3%A9mon_Day_2022_Kanto_Artwork.png" alt="Image de démarrage">
-  <div id="quiz"></div>
-  <div id="result"></div>
-  <button id="start-again" onclick="location.reload()">Recommencer</button>
+  <div class="container">
+    <h1>🎮 Quel starter as-tu obtenu ?</h1>
+    
+    <div id="name-form" class="name-form">
+      <h2>👋 Salut ! Comment tu t'appelles ?</h2>
+      <input type="text" id="student-name" placeholder="Ton prénom..." maxlength="30">
+      <button onclick="quiz.startQuiz()" class="start-btn">Commencer le quiz !</button>
+    </div>
+    
+    <div class="quiz-container">
+      <div class="header-placeholder">
+        <div class="pokemon-icons">🔥💧🌿⚡</div>
+        <p>Starters Pokémon</p>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+      
+      <div id="quiz"></div>
+      <div id="result"></div>
+    </div>
+  </div>
 
   <script>
-    const questions = [
-      { text: "Tu es dans une forêt. Tu fais quoi ?", answers: [
-        { text: "J’escalade les rochers", type: "🔥" },
-        { text: "J’observe les animaux", type: "🌿" },
-        { text: "Je cherche un coin calme", type: "💧" },
-        { text: "Je propose un jeu au groupe", type: "⚡" }
-      ]},
-      { text: "En classe, on te connaît pour…", answers: [
-        { text: "Ton envie de réussir", type: "🔥" },
-        { text: "Ton humour", type: "⚡" },
-        { text: "Ta logique", type: "💧" },
-        { text: "Ta créativité", type: "🌿" }
-      ]},
-      { text: "Un ami a un souci, tu…", answers: [
-        { text: "Cherches une solution rapide", type: "🔥" },
-        { text: "Restes à ses côtés pour l’écouter", type: "💧" },
-        { text: "L’encourages avec une blague", type: "⚡" },
-        { text: "Lui écris un petit mot", type: "🌿" }
-      ]},
-      { text: "Tu dois créer un jeu vidéo. Tu préfères…", answers: [
-        { text: "Un jeu d’action où ça explose", type: "🔥" },
-        { text: "Un jeu d’énigmes avec une histoire", type: "💧" },
-        { text: "Un monde mignon à explorer", type: "🌿" },
-        { text: "Un jeu multijoueur drôle", type: "⚡" }
-      ]},
-      { text: "Tu dois faire un exposé en groupe. Tu es…", answers: [
-        { text: "Le chef de projet", type: "🔥" },
-        { text: "Celui qui organise les idées", type: "💧" },
-        { text: "Celui qui dessine ou met en page", type: "🌿" },
-        { text: "Celui qui parle à l’oral", type: "⚡" }
-      ]},
-      { text: "Ton animal idéal serait…", answers: [
-        { text: "Un félin agile", type: "🔥" },
-        { text: "Un poisson paisible", type: "💧" },
-        { text: "Un renard ou un hibou", type: "🌿" },
-        { text: "Un singe ou un chien joueur", type: "⚡" }
-      ]},
-      { text: "Dans un jeu, tu aimes…", answers: [
-        { text: "Gagner vite et bien", type: "🔥" },
-        { text: "Résoudre les puzzles", type: "💧" },
-        { text: "Décorer, personnaliser", type: "🌿" },
-        { text: "Rire et faire des mini-jeux", type: "⚡" }
-      ]},
-      { text: "Si on te lance un défi, tu…", answers: [
-        { text: "Acceptes tout de suite", type: "🔥" },
-        { text: "Analyzes d’abord si ça vaut le coup", type: "💧" },
-        { text: "Trouves une solution originale", type: "🌿" },
-        { text: "Transformes ça en jeu", type: "⚡" }
-      ]},
-      { text: "Un week-end parfait, c’est…", answers: [
-        { text: "Sport ou aventure", type: "🔥" },
-        { text: "Lire, regarder un doc", type: "💧" },
-        { text: "Peindre ou faire du jardin", type: "🌿" },
-        { text: "Sortir avec des amis", type: "⚡" }
-      ]},
-      { text: "Une appli que tu aimes ?", answers: [
-        { text: "YouTube ou TikTok pour apprendre", type: "🔥" },
-        { text: "Wikipédia, Geogebra", type: "💧" },
-        { text: "Pinterest, Procreate, Seek", type: "🌿" },
-        { text: "Snapchat, Discord", type: "⚡" }
-      ]},
-      { text: "Tu préfères travailler…", answers: [
-        { text: "Quand c’est un challenge", type: "🔥" },
-        { text: "Quand c’est structuré", type: "💧" },
-        { text: "Quand je peux faire à ma façon", type: "🌿" },
-        { text: "Quand on peut rire un peu", type: "⚡" }
-      ]},
-      { text: "Si tu étais un super-pouvoir, tu serais…", answers: [
-        { text: "Le feu", type: "🔥" },
-        { text: "La glace", type: "💧" },
-        { text: "La nature", type: "🌿" },
-        { text: "L’électricité", type: "⚡" }
-      ]}
-    ];
+    class PokemonQuiz {
+      constructor() {
+        this.currentQuestion = 0;
+        this.scores = { fire: 0, water: 0, grass: 0, electric: 0 };
+        this.studentName = '';
+        this.answers = [];
+        this.quizElement = document.getElementById('quiz');
+        this.resultElement = document.getElementById('result');
+        this.progressElement = document.getElementById('progress');
+        this.nameForm = document.getElementById('name-form');
+        this.quizContainer = document.querySelector('.quiz-container');
+        
+        this.questions = [
+          {
+            text: "Tu es dans une forêt mystérieuse. Que fais-tu en premier ?",
+            answers: [
+              { text: "🔥 J'escalade les rochers pour avoir une vue d'ensemble", type: "fire" },
+              { text: "🌿 J'observe discrètement les créatures qui m'entourent", type: "grass" },
+              { text: "💧 Je cherche un point d'eau pour me repérer", type: "water" },
+              { text: "⚡ Je propose une exploration en groupe", type: "electric" }
+            ]
+          },
+          {
+            text: "En classe, tes amis te connaissent surtout pour...",
+            answers: [
+              { text: "🔥 Ta détermination à toujours réussir", type: "fire" },
+              { text: "⚡ Ton humour qui détend l'atmosphère", type: "electric" },
+              { text: "💧 Ta logique implacable", type: "water" },
+              { text: "🌿 Ta créativité débordante", type: "grass" }
+            ]
+          },
+          {
+            text: "Un ami traverse une période difficile. Tu...",
+            answers: [
+              { text: "🔥 Cherches immédiatement une solution concrète", type: "fire" },
+              { text: "💧 Restes à ses côtés pour l'écouter patiemment", type: "water" },
+              { text: "⚡ Tries de le faire rire pour lui changer les idées", type: "electric" },
+              { text: "🌿 Lui écris un petit mot touchant", type: "grass" }
+            ]
+          },
+          {
+            text: "Tu dois créer ton jeu vidéo idéal. Tu choisirais...",
+            answers: [
+              { text: "🔥 Un jeu d'action intense avec des combats épiques", type: "fire" },
+              { text: "💧 Un puzzle game avec une histoire complexe", type: "water" },
+              { text: "🌿 Un monde ouvert paisible à explorer", type: "grass" },
+              { text: "⚡ Un party game multijoueur délirant", type: "electric" }
+            ]
+          },
+          {
+            text: "Lors d'un projet de groupe, tu es naturellement...",
+            answers: [
+              { text: "🔥 Le leader qui motive et dirige", type: "fire" },
+              { text: "💧 L'organisateur qui structure les idées", type: "water" },
+              { text: "🌿 L'artiste qui s'occupe du visuel", type: "grass" },
+              { text: "⚡ L'orateur qui présente avec brio", type: "electric" }
+            ]
+          },
+          {
+            text: "Si tu pouvais adopter un compagnon, ce serait...",
+            answers: [
+              { text: "🔥 Un félin sauvage et indépendant", type: "fire" },
+              { text: "💧 Un animal aquatique élégant", type: "water" },
+              { text: "🌿 Une créature de la forêt sage et discrète", type: "grass" },
+              { text: "⚡ Un animal social et énergique", type: "electric" }
+            ]
+          },
+          {
+            text: "Dans un jeu, ce qui te motive le plus c'est...",
+            answers: [
+              { text: "🔥 Gagner rapidement et efficacement", type: "fire" },
+              { text: "💧 Résoudre des énigmes complexes", type: "water" },
+              { text: "🌿 Personnaliser et décorer mon environnement", type: "grass" },
+              { text: "⚡ M'amuser et créer des moments mémorables", type: "electric" }
+            ]
+          },
+          {
+            text: "Face à un défi inconnu, ta première réaction est...",
+            answers: [
+              { text: "🔥 J'accepte immédiatement, sans hésiter", type: "fire" },
+              { text: "💧 J'analyse les pour et les contre", type: "water" },
+              { text: "🌿 Je cherche une approche originale", type: "grass" },
+              { text: "⚡ Je transforme ça en défi amusant", type: "electric" }
+            ]
+          },
+          {
+            text: "Ton week-end de rêve ressemblerait à...",
+            answers: [
+              { text: "🔥 Une aventure sportive ou un road trip", type: "fire" },
+              { text: "💧 Lire un bon livre ou regarder un documentaire", type: "water" },
+              { text: "🌿 Peindre, jardiner ou créer quelque chose", type: "grass" },
+              { text: "⚡ Organiser une fête avec tous mes amis", type: "electric" }
+            ]
+          },
+          {
+            text: "L'application que tu utilises le plus ressemble à...",
+            answers: [
+              { text: "🔥 YouTube pour apprendre de nouvelles compétences", type: "fire" },
+              { text: "💧 Une app éducative ou de référence", type: "water" },
+              { text: "🌿 Une app créative comme Pinterest ou Procreate", type: "grass" },
+              { text: "⚡ Les réseaux sociaux pour rester connecté", type: "electric" }
+            ]
+          }
+        ];
 
-    const starters = {
-      "🔥": [
-        "Ton starter est Flambino ! 🔥 Rapide, curieux et toujours prêt à foncer.",
-        "Ton starter est Salamèche ! 🔥 Petit dragon vif, il aime relever les défis.",
-        "Ton starter est Ouisticram ! 🔥 Agile et malin, il grimpe vers la victoire.",
-        "Ton starter est Héricendre ! 🔥 Calme en apparence, mais explosif quand il faut.",
-        "Ton starter est Litten ! 🔥 Indépendant et stylé, il a du feu dans le regard."
-      ],
-      "💧": [
-        "Ton starter est Tiplouf ! 💧 Calme, fier, et déterminé à sa façon.",
-        "Ton starter est Carapuce ! 💧 Stratège rigolo, il avance à son rythme.",
-        "Ton starter est Moustillon ! 💧 Sérieux et méthodique, il ne rate rien.",
-        "Ton starter est Otaquin ! 💧 Créatif et doux, il apporte toujours un sourire.",
-        "Ton starter est Kaiminus ! 💧 Énergique et un peu maladroit, mais attachant."
-      ],
-      "🌿": [
-        "Ton starter est Brindibou ! 🌿 Discret, malin, et toujours à l’écoute.",
-        "Ton starter est Bulbizarre ! 🌿 Calme et équilibré, il grandit avec sagesse.",
-        "Ton starter est Germignon ! 🌿 Doux, loyal, et très attentionné.",
-        "Ton starter est Arcko ! 🌿 Rapide et silencieux, il agit avec précision.",
-        "Ton starter est Vipélierre ! 🌿 Élégant et observateur, il garde toujours son sang-froid."
-      ],
-      "⚡": [
-        "Ton starter est Pikachu ! ⚡ Énergique, sociable et fidèle compagnon.",
-        "Ton starter est Evoli ! ⚡ Polyvalent et attachant, il peut tout devenir.",
-        "Ton starter est Riolu ! ⚡ Déterminé et loyal, il apprend vite.",
-        "Ton starter est Lixy ! ⚡ Curieux et rapide, il adore explorer.",
-        "Ton starter est Poussifeu ! ⚡ Petit, vif et toujours partant pour s’amuser."
-      ]
-    };
+        this.starters = {
+          fire: [
+            { name: "Salamèche", description: "Courageux et déterminé, il n'abandonne jamais", emoji: "🔥" },
+            { name: "Héricendre", description: "Discret mais explosif quand il le faut", emoji: "🔥" },
+            { name: "Poussifeu", description: "Petit mais plein d'énergie et de détermination", emoji: "🔥" },
+            { name: "Ouisticram", description: "Agile et malin, toujours prêt à relever un défi", emoji: "🔥" },
+            { name: "Flamiaou", description: "Indépendant et charismatique", emoji: "🔥" }
+          ],
+          water: [
+            { name: "Carapuce", description: "Stratège naturel avec un grand cœur", emoji: "💧" },
+            { name: "Kaiminus", description: "Énergique et loyal, malgré sa maladresse", emoji: "💧" },
+            { name: "Gobou", description: "Paisible mais incroyablement résistant", emoji: "💧" },
+            { name: "Tiplouf", description: "Fier et déterminé, ne recule devant rien", emoji: "💧" },
+            { name: "Moustillon", description: "Méthodique et précis dans tout ce qu'il fait", emoji: "💧" }
+          ],
+          grass: [
+            { name: "Bulbizarre", description: "Équilibré et sage, grandit avec patience", emoji: "🌿" },
+            { name: "Germignon", description: "Doux et attentionné, toujours là pour les autres", emoji: "🌿" },
+            { name: "Arcko", description: "Calme et observateur, agit avec précision", emoji: "🌿" },
+            { name: "Tortipouss", description: "Patient et persévérant, rien ne l'arrête", emoji: "🌿" },
+            { name: "Vipélierre", description: "Élégant et réfléchi, garde son sang-froid", emoji: "🌿" }
+          ],
+          electric: [
+            { name: "Pikachu", description: "Énergique et fidèle, le compagnon idéal", emoji: "⚡" },
+            { name: "Évoli", description: "Polyvalent et attachant, plein de potentiel", emoji: "⚡" },
+            { name: "Riolu", description: "Déterminé et loyal, apprend très vite", emoji: "⚡" },
+            { name: "Élekid", description: "Curieux et électrisant, toujours en mouvement", emoji: "⚡" },
+            { name: "Pachirisu", description: "Espiègle et sociable, apporte la joie partout", emoji: "⚡" }
+          ]
+        };
 
-    let currentQuestion = 0;
-    let scores = { "🔥": 0, "💧": 0, "🌿": 0, "⚡": 0 };
+        this.imageUrls = {
+          "Salamèche": "https://www.pokepedia.fr/images/thumb/8/89/Salam%C3%A8che-RFVF.png/530px-Salam%C3%A8che-RFVF.png",
+          "Héricendre": "https://www.pokepedia.fr/images/thumb/a/ac/H%C3%A9ricendre-HGSS.png/790px-H%C3%A9ricendre-HGSS.png",
+          "Poussifeu": "https://www.pokepedia.fr/images/thumb/1/11/Poussifeu-RS.png/362px-Poussifeu-RS.png",
+          "Ouisticram": "https://www.pokepedia.fr/images/thumb/9/93/Ouisticram-DP.png/357px-Ouisticram-DP.png",
+          "Flamiaou": "https://www.pokepedia.fr/images/7/79/Flamiaou_%28boule_de_feu%29-SL.png",
+          "Carapuce": "https://www.pokepedia.fr/images/thumb/c/cc/Carapuce-RFVF.png/580px-Carapuce-RFVF.png",
+          "Kaiminus": "https://www.pokepedia.fr/images/thumb/0/00/Kaiminus-LPZA.png/382px-Kaiminus-LPZA.png",
+          "Gobou": "https://www.pokepedia.fr/images/thumb/f/f3/Gobou-RS.png/550px-Gobou-RS.png",
+          "Tiplouf": "https://www.pokepedia.fr/images/thumb/e/ed/Tiplouf-DP.png/398px-Tiplouf-DP.png",
+          "Moustillon": "https://www.pokepedia.fr/images/thumb/8/81/Moustillon-NB.png/463px-Moustillon-NB.png",
+          "Bulbizarre": "https://www.pokepedia.fr/images/thumb/e/ef/Bulbizarre-RFVF.png/644px-Bulbizarre-RFVF.png",
+          "Germignon": "https://www.pokepedia.fr/images/thumb/9/9d/Germignon-LPZA.png/487px-Germignon-LPZA.png",
+          "Arcko": "https://www.pokepedia.fr/images/thumb/e/ef/Arcko-RS.png/570px-Arcko-RS.png",
+          "Tortipouss": "https://www.pokepedia.fr/images/thumb/b/ba/Tortipouss-DP.png/639px-Tortipouss-DP.png",
+          "Vipélierre": "https://www.pokepedia.fr/images/thumb/8/8d/Vip%C3%A9lierre-NB.png/523px-Vip%C3%A9lierre-NB.png",
+          "Pikachu": "https://www.pokepedia.fr/images/thumb/a/a7/Pikachu_%28Casquette_d%27Alola%29-SL.png/308px-Pikachu_%28Casquette_d%27Alola%29-SL.png",
+          "Évoli": "https://www.pokepedia.fr/images/thumb/8/8b/%C3%89voli-RFVF.png/487px-%C3%89voli-RFVF.png",
+          "Riolu": "https://www.pokepedia.fr/images/thumb/7/7b/Riolu-DP.png/558px-Riolu-DP.png",
+          "Élekid": "https://www.pokepedia.fr/images/thumb/e/e4/%C3%89lekid-DP.png/590px-%C3%89lekid-DP.png",
+          "Pachirisu": "https://www.pokepedia.fr/images/thumb/4/41/Pachirisu-DP.png/663px-Pachirisu-DP.png"
+        };
 
-    const quizDiv = document.getElementById("quiz");
-    const resultDiv = document.getElementById("result");
+        this.init();
+      }
 
-    function showQuestion() {
-      if (currentQuestion >= questions.length) return showResult();
+      init() {
+        // Le quiz commence par la saisie du nom
+      }
 
-      const q = questions[currentQuestion];
-      quizDiv.innerHTML = `<div class="question">
-        <h2>${q.text}</h2>
-        <div class="answers">
-          ${q.answers.map((a, i) => `<button onclick="answer('${a.type}')">${a.text}</button>`).join('')}
-        </div>
-      </div>`;
+      startQuiz() {
+        const nameInput = document.getElementById('student-name');
+        const name = nameInput.value.trim();
+        
+        if (name.length < 2) {
+          nameInput.style.borderColor = '#ff6b6b';
+          nameInput.placeholder = 'Entre ton prénom s\'il te plaît !';
+          return;
+        }
+        
+        this.studentName = name;
+        this.nameForm.style.display = 'none';
+        this.quizContainer.style.display = 'block';
+        this.showQuestion();
+      }
+
+      updateProgress() {
+        const percentage = (this.currentQuestion / this.questions.length) * 100;
+        this.progressElement.style.width = `${percentage}%`;
+      }
+
+      showQuestion() {
+        if (this.currentQuestion >= this.questions.length) {
+          return this.showResult();
+        }
+
+        this.updateProgress();
+        const question = this.questions[this.currentQuestion];
+        
+        this.quizElement.innerHTML = `
+          <div class="question-container">
+            <div class="question-number">
+              Question ${this.currentQuestion + 1} sur ${this.questions.length}
+            </div>
+            <div class="question">
+              <h2>${question.text}</h2>
+              <div class="answers">
+                ${question.answers.map(answer => 
+                  `<button class="answer-btn" onclick="quiz.answer('${answer.type}')">
+                    ${answer.text}
+                  </button>`
+                ).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      answer(type) {
+        const question = this.questions[this.currentQuestion];
+        const selectedAnswer = question.answers.find(a => a.type === type);
+        
+        // Enregistrer la réponse
+        this.answers.push({
+          question: question.text,
+          answer: selectedAnswer.text,
+          type: type
+        });
+        
+        this.scores[type]++;
+        this.currentQuestion++;
+        setTimeout(() => this.showQuestion(), 200);
+      }
+
+      getWinningType() {
+        return Object.entries(this.scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
+      }
+
+      showResult() {
+        this.updateProgress();
+        const winningType = this.getWinningType();
+        const possibleStarters = this.starters[winningType];
+        const chosenStarter = possibleStarters[Math.floor(Math.random() * possibleStarters.length)];
+        
+        const elementClasses = { fire: 'fire', water: 'water', grass: 'grass', electric: 'electric' };
+        const elementNames = { fire: 'Feu', water: 'Eau', grass: 'Plante', electric: 'Électrique' };
+
+        // Envoyer les résultats
+        this.sendResults(chosenStarter, winningType, elementNames[winningType]);
+
+        this.quizElement.innerHTML = '';
+        this.resultElement.innerHTML = `
+          <div class="result">
+            <h2>🎉 ${this.studentName}, ton starter est...</h2>
+            <div class="starter-name">${chosenStarter.name}</div>
+            <div class="starter-image-container">
+              <img class="starter-image" src="${this.imageUrls[chosenStarter.name]}" 
+                   alt="${chosenStarter.name}"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <div class="image-fallback" style="display:none;">
+                <div class="pokemon-sprite">${chosenStarter.emoji}</div>
+                <p>${chosenStarter.name}</p>
+              </div>
+            </div>
+            <div class="element-badge ${elementClasses[winningType]}">
+              ${chosenStarter.emoji} Type ${elementNames[winningType]}
+            </div>
+            <div class="description">${chosenStarter.description}</div>
+            
+            <div class="scores-display">
+              ${Object.entries(this.scores).map(([type, score]) => 
+                `<div class="score-item ${elementClasses[type]}">
+                  ${elementNames[type]}: ${score}
+                </div>`
+              ).join('')}
+            </div>
+            
+            <button class="restart-btn" onclick="quiz.restart()">
+              🔄 Refaire le quiz
+            </button>
+          </div>
+        `;
+      }
+
+      async sendResults(starter, winningType, elementName) {
+        const resultData = {
+          nom: this.studentName,
+          starter: starter.name,
+          type: elementName,
+          scores_feu: this.scores.fire,
+          scores_eau: this.scores.water,
+          scores_plante: this.scores.grass,
+          scores_electrique: this.scores.electric,
+          date: new Date().toLocaleString('fr-FR'),
+          reponses: this.answers.map(a => `${a.question}: ${a.answer}`).join(' | ')
+        };
+
+        // Sauvegarder les résultats localement
+        this.saveToLocalStorage(resultData);
+        
+        console.log('✅ Résultats sauvegardés pour', this.studentName);
+      }
+
+      saveToLocalStorage(data) {
+        let allResults = JSON.parse(localStorage.getItem('pokemonQuizResults') || '[]');
+        allResults.push(data);
+        localStorage.setItem('pokemonQuizResults', JSON.stringify(allResults));
+        
+        // Afficher un bouton de téléchargement si c'est le premier résultat
+        this.showDownloadButton();
+      }
+
+      showDownloadButton() {
+        if (!document.getElementById('download-btn')) {
+          const downloadBtn = document.createElement('button');
+          downloadBtn.id = 'download-btn';
+          downloadBtn.className = 'download-btn';
+          downloadBtn.innerHTML = '📊 Télécharger les résultats (Enseignant)';
+          downloadBtn.onclick = () => this.downloadResults();
+          downloadBtn.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          `;
+          document.body.appendChild(downloadBtn);
+        }
+      }
+
+      downloadResults() {
+        const results = JSON.parse(localStorage.getItem('pokemonQuizResults') || '[]');
+        
+        if (results.length === 0) {
+          alert('Aucun résultat à télécharger encore !');
+          return;
+        }
+
+        // Créer le CSV
+        const headers = ['Nom', 'Starter', 'Type', 'Score Feu', 'Score Eau', 'Score Plante', 'Score Électrique', 'Date', 'Réponses détaillées'];
+        const csvContent = [
+          headers.join(','),
+          ...results.map(row => [
+            `"${row.nom}"`,
+            `"${row.starter}"`, 
+            `"${row.type}"`,
+            row.scores_feu,
+            row.scores_eau,
+            row.scores_plante,
+            row.scores_electrique,
+            `"${row.date}"`,
+            `"${row.reponses}"`
+          ].join(','))
+        ].join('\n');
+
+        // Télécharger le fichier
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `resultats_pokemon_quiz_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        alert(`✅ ${results.length} résultats téléchargés !`);
+      }
+
+      restart() {
+        this.currentQuestion = 0;
+        this.scores = { fire: 0, water: 0, grass: 0, electric: 0 };
+        this.answers = [];
+        this.resultElement.innerHTML = '';
+        this.quizContainer.style.display = 'none';
+        this.nameForm.style.display = 'block';
+        document.getElementById('student-name').value = '';
+      }
     }
 
-    function answer(type) {
-      scores[type]++;
-      currentQuestion++;
-      showQuestion();
-    }
-
-    function showResult() {
-      quizDiv.innerHTML = "";
-      const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
-      const options = starters[winner];
-      const chosen = options[Math.floor(Math.random() * options.length)];
-      resultDiv.innerHTML = chosen;
-      document.getElementById("start-again").style.display = "block";
-    }
-
-    showQuestion();
+    // Initialisation du quiz
+    const quiz = new PokemonQuiz();
   </script>
 </body>
 </html>
